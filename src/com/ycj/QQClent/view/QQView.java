@@ -1,0 +1,85 @@
+package com.ycj.QQClent.view;
+
+import com.ycj.QQClent.view.Utils.Utils;
+import org.junit.jupiter.api.Test;
+
+
+public class QQView {
+    public static void main(String[] args) {
+        new QQView().showMenu();
+        System.out.println("程序退出");
+    }
+    //全局循环变量
+    private boolean loop = true;
+    String key =null;
+    //方法显示菜单
+
+    public void showMenu(){
+        while (loop) {
+            System.out.println("=========欢迎登录网络通讯系统=========");
+            System.out.println("\t\t1. 登录系统");
+            System.out.println("\t\t9. 退出系统");
+
+            System.out.print("请选择：");
+            key = Utils.readString();
+            switch (key) {
+                case "1":
+                    System.out.println("请输入用户名：");
+                    String userId = Utils.readString();
+                    System.out.println("请输入密  码：");
+                    String userPassword = Utils.readString();
+                    //输入后到服务端验证
+                    //先加入成功
+                    if(true)
+                    {
+                       System.out.println("=========欢迎用户"+userId+"========= ");
+                       while (loop)
+                       {
+                           System.out.println("=========网络通讯二级菜单用户("+userId+")=========");
+                           System.out.println("\t\t1. 显示在线用户列表");
+                           System.out.println("\t\t2. 群发消息");
+                           System.out.println("\t\t3. 私聊消息");
+                           System.out.println("\t\t4. 发送文件");
+                           System.out.println("\t\t9. 退出系统");
+                           System.out.print("请选择：");
+                           key = Utils.readString();
+                           switch (key) {
+                               case "1":
+                                   System.out.println("显示在线用户列表");
+                                   break;
+                               case "2":
+                                   System.out.println("群发消息");
+                                   break;
+                               case "3":
+                                   System.out.println("私聊消息");
+                                   break;
+                               case "4":
+                                   System.out.println("发送文件");
+                                   break;
+                               case "9":
+                                   //退出系统
+                                   loop = false;
+                                   break;
+                           }
+
+                       }
+                    }
+                    else
+                    {
+                       System.out.println("用户名或密码错误，请重新登录");
+                    }
+
+                    break;
+                case "9":
+                    //退出系统
+                    loop = false;
+                    break;
+
+            }
+
+
+
+        }
+
+    }
+}
