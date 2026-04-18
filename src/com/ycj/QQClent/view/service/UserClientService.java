@@ -9,8 +9,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-//进行用户信息的管理
+//进行用户信息的管理，用户登陆验证
 public class UserClientService   {
+    //通用成员属性
     private User user = new User();
     //用于和服务器通信的Socket
     private Socket socket = null;
@@ -41,6 +42,7 @@ public class UserClientService   {
         //接收到服务器返回的Message对象后进行判断
         if(message.getMessageType().equals(MessageType.MESSAGE_LOGIN_SUCCEED))
         {
+            //启动线程一直与服务端通信
 
             //创建一个线程，保持和服务器的通信，该线程需要持有socket对象->创建线程类
             ClientContentServerThread clientContentServerThread = new ClientContentServerThread(socket);
@@ -57,5 +59,26 @@ public class UserClientService   {
 
 
     return isLogin;
+    }
+    //向服务器请求在线服务列表
+    public void onlineFriendList()
+    {//发送message
+        Message message = new Message();
+        message.setMessageType(MessageType.MESSAGE_GET_ONLINE_FRIEND);
+        message.setSender(user.getUserId());
+
+        //发送服务器。先获取socket 因为 socket在线程中 县城又在集合先获取集合,对应线程-》 socket->output
+        try {
+            OutputStream outputStream = ManagerClientConectServiceThread.getClientContentServerThread(user.getUserId())
+                    .getSocket().getOutputStream();
+            //获得流以后加入对象
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(message);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 }
