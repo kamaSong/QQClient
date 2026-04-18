@@ -11,7 +11,7 @@ import java.io.IOException;
 public class QQView {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         new QQView().showMenu();
-        System.out.println("程序退出");
+        System.out.println("程序退出");//主线程退出  与服务器的线程还在运行
     }
     //全局循环变量
     private boolean loop = true;
@@ -67,7 +67,8 @@ public class QQView {
                                    break;
                                case "9":
                                    //退出系统
-                                   loop = false;
+                                    userClientService.exitSystem();
+                                   loop = false;//进推出主线程
                                    break;
                            }
 

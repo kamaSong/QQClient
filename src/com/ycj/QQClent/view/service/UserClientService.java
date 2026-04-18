@@ -81,4 +81,24 @@ public class UserClientService   {
 
 
     }
+    public void exitSystem()
+    {
+        //创建一个Message对象，类型为MESSAGE_CLIENT_EXIT
+        Message message = new Message();
+        message.setMessageType(MessageType.MESSAGE_CLIENT_EXIT);
+        //关闭对应的socket 要穿个用户id
+        message.setSender(user.getUserId());
+        //获取socket有socket
+        try {
+            //可以在线程集合中获取socket，也可以直接使用socket
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+            objectOutputStream.writeObject(message);//发送给服务器
+            System.out.println(user.getUserId()+"客户端已退出");
+            System.exit(0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
 }
