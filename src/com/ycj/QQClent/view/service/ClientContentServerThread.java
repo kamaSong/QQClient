@@ -3,6 +3,7 @@ package com.ycj.QQClent.view.service;
 import com.ycj.QQcommon.Message;
 import com.ycj.QQcommon.MessageType;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -38,8 +39,28 @@ public class ClientContentServerThread extends Thread {
 
 
                 }
-                else{
+                //私聊消息
+                else  if(message.getMessageType().equals(MessageType.MESSAGE_COMM_MES))
+                {
+                    //转发消息显示
+                    System.out.println("\n"+message.getSender()+"对"+message.getReceiver()+"说:"+message.getContent());
                     //暂时不处理
+                }
+                //群发消息
+                else if(message.getMessageType().equals(MessageType.MESSAGE_GROUP_MES))
+                {
+                    //群发消息显示
+                    System.out.println("\n"+message.getSender()+"对所有用户说:"+message.getContent());
+                    //暂时不处理
+                }
+                else if(message.getMessageType().equals(MessageType.MESSAGE_FILE_MES))
+                {
+                    System.out.println("\n"+message.getSender()+"对"+message.getReceiver()+"发文件:"+message.getSrc()+"到我的"+message.getDest());
+                    //取message 字节写出到磁盘
+                    FileOutputStream fileOutputStream = new FileOutputStream(message.getDest());
+                    fileOutputStream.write(message.getFileBytes());
+                    fileOutputStream.close();
+                    System.out.println("文件已保存到"+message.getDest());
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);

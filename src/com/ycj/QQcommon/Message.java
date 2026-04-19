@@ -14,7 +14,44 @@ public class Message implements Serializable {
     private String content;
     //发送时间
     private String sendTime;
+    //发送文件进行扩展，字节数组
+    private byte[] fileBytes;
 
+    private long fileLength=0;
+    private String dest;//目的
+    private String src;//源
+
+    public String getDest() {
+        return dest;
+    }
+
+    public void setDest(String dest) {
+        this.dest = dest;
+    }
+
+    public byte[] getFileBytes() {
+        return fileBytes;
+    }
+
+    public void setFileBytes(byte[] fileBytes) {
+        this.fileBytes = fileBytes;
+    }
+
+    public long getFileLength() {
+        return fileLength;
+    }
+
+    public void setFileLength(long fileLength) {
+        this.fileLength = fileLength;
+    }
+
+    public String getSrc() {
+        return src;
+    }
+
+    public void setSrc(String src) {
+        this.src = src;
+    }
 
     //消息类型，通过接口进行定义
     private String messageType;

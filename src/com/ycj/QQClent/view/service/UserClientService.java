@@ -8,6 +8,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Date;
 
 //进行用户信息的管理，用户登陆验证
 public class UserClientService   {
@@ -91,7 +92,7 @@ public class UserClientService   {
         //获取socket有socket
         try {
             //可以在线程集合中获取socket，也可以直接使用socket
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(ManagerClientConectServiceThread.getClientContentServerThread(user.getUserId()).getSocket().getOutputStream());
             objectOutputStream.writeObject(message);//发送给服务器
             System.out.println(user.getUserId()+"客户端已退出");
             System.exit(0);
@@ -99,6 +100,48 @@ public class UserClientService   {
             throw new RuntimeException(e);
         }
 
+
+    }
+    //发送消息给其他用户
+    public void sendMessageToOther(String content,String senderId,String getterId)
+    {
+        //创建一个Message对象
+        Message message = new Message();
+        //类型
+        message.setMessageType(MessageType.MESSAGE_COMM_MES);//普通消息
+        message.setSender(senderId);
+        message.setReceiver(getterId);
+        message.setContent(content);
+        message.setSendTime(new Date().toString());
+        System.out.println(senderId+"对"+getterId+"说："+content);
+//message构建完成，写给 服务器,集合中获取sendid的socket
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(ManagerClientConectServiceThread.
+                    getClientContentServerThread(senderId).getSocket().getOutputStream());
+            objectOutputStream.writeObject(message);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+    //发送群消息   群发
+    public void sendMessageToGroup(String content,String senderId)
+    {
+        Message message = new Message();
+        message.setMessageType(MessageType.MESSAGE_GROUP_MES);
+        message.setSender(senderId);
+        message.setContent(content);
+        message.setSendTime(new Date().toString());
+        System.out.println(senderId+"说："+content);
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(ManagerClientConectServiceThread.getClientContentServerThread(senderId).
+                    getSocket().getOutputStream());
+            objectOutputStream.writeObject(message);
+            //发送给服务器，服务器负责群发
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }
